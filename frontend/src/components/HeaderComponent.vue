@@ -12,7 +12,7 @@
           @click.prevent="globalStore.isOpenModal = true"
           >Login</a
         >
-        <button class="header-sheme">
+        <button class="header-sheme" @click="changeThemeMode">
           <svg class="header-sheme-icon">
             <use href="/src/assets/img/sprites.svg#setting"></use>
           </svg>
@@ -23,19 +23,41 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 import { useGlobalStore } from '../stores/global';
 
 const globalStore = useGlobalStore();
 
 const isHeaderActive = ref(false);
+const isDarkMode = ref(true);
 
 function handleScroll() {
   isHeaderActive.value = window.scrollY >= 40;
 }
 
+function changeThemeMode() {
+  isDarkMode.value = !isDarkMode.value;
+  document.documentElement.setAttribute(
+    'data-theme',
+    isDarkMode.value ? 'dark' : 'light'
+  );
+}
+
+watch(isDarkMode, (newValue) => {
+  localStorage.setItem('theme', newValue ? 'dark' : 'light');
+});
+
 onMounted(() => {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) {
+    isDarkMode.value = savedTheme === 'dark';
+  }
+  document.documentElement.setAttribute(
+    'data-theme',
+    isDarkMode.value ? 'dark' : 'light'
+  );
+
   window.addEventListener('scroll', handleScroll);
 });
 
