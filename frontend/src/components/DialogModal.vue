@@ -84,7 +84,7 @@ watch(
   position: absolute;
   top: 30px;
   right: 27px;
-  cursor: alias;
+  cursor: pointer;
 }
 
 .dialog-close::before,

@@ -75,4 +75,22 @@ const portfolio = [
   height: 100%;
   object-fit: cover;
 }
+
+@media (max-width: 1100px) {
+  .portfolio-card {
+    flex: 1 1 46%;
+  }
+}
+
+@media (max-width: 650px) {
+  .portfolio-title {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 500px) {
+  .portfolio-card {
+    flex: 1 1 100%;
+  }
+}
 </style>

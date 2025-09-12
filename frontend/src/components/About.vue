@@ -47,4 +47,10 @@
 .about-desc + .about-desc {
   margin-top: 10px;
 }
+
+@media (max-width: 650px) {
+  .about-title {
+    font-size: 26px;
+  }
+}
 </style>

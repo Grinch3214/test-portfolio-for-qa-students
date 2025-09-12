@@ -137,10 +137,6 @@ const list = [
 .hero-item {
 }
 
-.hero-item:nth-child(3) .hero-link {
-  cursor: default;
-}
-
 .hero-link {
   width: 36px;
   height: 36px;
@@ -197,11 +193,49 @@ const list = [
   transition: 0.2s linear;
 }
 
-.hero-buttons-btn:last-child {
-  --main-color: #0c151d;
-}
-
 .hero-buttons-btn:hover {
   background: #63bce9;
+}
+
+@media (max-width: 650px) {
+  .hero-box {
+    flex-direction: column;
+    justify-content: center;
+    gap: 30px;
+  }
+
+  .hero-inner {
+    text-align: center;
+  }
+
+  .hero-photo {
+    flex: 0 0;
+  }
+
+  .hero-list {
+    gap: 20px;
+  }
+
+  .hero-title {
+    font-size: 30px;
+  }
+
+  .hero-exp {
+    gap: 20px;
+    flex-flow: wrap;
+  }
+
+  .hero-exp-item p + p {
+    font-size: 18px;
+  }
+
+  .hero-buttons {
+    flex-flow: column;
+    gap: 15px;
+  }
+
+  .hero-buttons-btn {
+    padding: 20px;
+  }
 }
 </style>

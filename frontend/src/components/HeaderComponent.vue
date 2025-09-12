@@ -93,10 +93,27 @@ onUnmounted(() => {
   width: 40px;
   height: 40px;
   transition: 0.2s linear;
+  cursor: pointer;
 }
 
 .header-sheme-icon {
   width: 40px;
   height: 40px;
+}
+
+@media (max-width: 650px) {
+  .header {
+    padding: 30px 0;
+  }
+
+  .header-nav {
+    gap: 20px;
+  }
+
+  .header-sheme,
+  .header-sheme-icon {
+    width: 30px;
+    height: 30px;
+  }
 }
 </style>
