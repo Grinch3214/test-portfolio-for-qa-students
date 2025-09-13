@@ -11,11 +11,12 @@
   <DialogModal
     :is-open="globalStore.isOpenModal"
     @update:is-open="(val) => (globalStore.isOpenModal = val)"
+    @submit="formData"
   />
 </template>
 
 <script setup>
-import { watch } from 'vue';
+import { watch, onMounted } from 'vue';
 import { RouterView } from 'vue-router';
 import DialogModal from './components/DialogModal.vue';
 import { useGlobalStore } from './stores/global';
@@ -23,6 +24,11 @@ import HeaderComponent from './components/HeaderComponent.vue';
 
 const globalStore = useGlobalStore();
 const body = document.querySelector('body');
+
+function formData(data) {
+  console.log(data);
+  globalStore.signIn(data);
+}
 
 watch(
   () => globalStore.isOpenModal,
@@ -32,6 +38,10 @@ watch(
     }
   }
 );
+
+onMounted(async () => {
+  await globalStore.checkAuth();
+});
 </script>
 
 <style scoped>

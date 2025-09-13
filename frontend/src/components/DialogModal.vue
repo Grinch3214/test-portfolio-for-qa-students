@@ -3,15 +3,25 @@
     <button class="dialog-close" @click="closeDialog"></button>
     <h2 class="dialog-title">Login</h2>
 
-    <form class="dialog-form" action="#" method="POST">
+    <form
+      class="dialog-form"
+      action="#"
+      method="POST"
+      @submit.prevent="handleSubmit"
+    >
       <label>
         <p>Email</p>
-        <input type="text" name="email" />
+        <input v-model="formData.email" type="text" name="email" />
       </label>
 
       <label>
         <p>Password</p>
-        <input type="text" name="password" required />
+        <input
+          v-model="formData.password"
+          type="text"
+          name="password"
+          required
+        />
       </label>
 
       <button class="dialog-form-login">LOGIN</button>
@@ -44,10 +54,10 @@ function closeDialog() {
   dialogRef.value.close();
 }
 
-// const handleSubmit = () => {
-//   emit('submit', { ...formData.value });
-//   closeDialog();
-// };
+const handleSubmit = () => {
+  emit('submit', { ...formData.value });
+  closeDialog();
+};
 
 watch(
   () => props.isOpen,
