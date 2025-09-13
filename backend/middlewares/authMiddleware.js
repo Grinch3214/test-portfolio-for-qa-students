@@ -3,8 +3,6 @@ import jwt from 'jsonwebtoken';
 function authMiddleware(req, res, next) {
   const token = req.headers['token'];
 
-  console.log(token);
-
   if (!token) {
     return res.status(401).json({ message: 'Token is not found' });
   }

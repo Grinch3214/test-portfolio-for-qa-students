@@ -41,6 +41,8 @@ watch(
 
 onMounted(async () => {
   await globalStore.checkAuth();
+
+  console.log('isAuthenticated: ', globalStore.isAuthenticated);
 });
 </script>
 
