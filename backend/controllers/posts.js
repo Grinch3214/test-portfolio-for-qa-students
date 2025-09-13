@@ -1,18 +1,31 @@
 import { mockData, getNextId } from '../mockdata.js';
+import { pool } from '../db.js';
 
-function getAllPosts(req, res) {
-  res.json(mockData);
+async function getAllPosts(req, res) {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM posts ORDER BY created_at DESC'
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error loading posts:', err);
+    res.status(500).json({ message: 'Error load posts', error: err.message });
+  }
 }
 
-function getSinglePost(req, res) {
-  const { id } = req.params;
+async function getSinglePost(req, res) {
+  try {
+    const { id } = req.params;
+    const result = await pool.query('SELECT * FROM posts WHERE id = $1', [id]);
 
-  const post = mockData.find((item) => item.id === id);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
 
-  if (post) {
-    res.json(day);
-  } else {
-    res.status(404).json({ message: 'Post not found' });
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Error searching post:', err);
+    res.status(500).json({ message: 'Error search post', error: err.message });
   }
 }
 
