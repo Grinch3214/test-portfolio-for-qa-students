@@ -16,73 +16,73 @@ function getSinglePost(req, res) {
   }
 }
 
-function postWorkouts(req, res) {
-  const { date, title, sets } = req.body;
+// function postWorkouts(req, res) {
+//   const { date, title, sets } = req.body;
 
-  console.log(date, title, sets);
+//   console.log(date, title, sets);
 
-  if (!date || !title || !Array.isArray(sets)) {
-    return res
-      .status(400)
-      .json({ message: 'Missing required fields: date, title, sets' });
-  }
+//   if (!date || !title || !Array.isArray(sets)) {
+//     return res
+//       .status(400)
+//       .json({ message: 'Missing required fields: date, title, sets' });
+//   }
 
-  const day = mockData.find((d) => d.date === date);
+//   const day = mockData.find((d) => d.date === date);
 
-  const newWorkout = {
-    id: getNextId(),
-    title,
-    sets: sets.map((s) => ({
-      weight: Number(s.weight),
-      reps: Number(s.reps),
-    })),
-  };
+//   const newWorkout = {
+//     id: getNextId(),
+//     title,
+//     sets: sets.map((s) => ({
+//       weight: Number(s.weight),
+//       reps: Number(s.reps),
+//     })),
+//   };
 
-  if (day) {
-    day.workouts.push(newWorkout);
-  } else {
-    mockData.push({
-      date,
-      workouts: [newWorkout],
-    });
-  }
+//   if (day) {
+//     day.workouts.push(newWorkout);
+//   } else {
+//     mockData.push({
+//       date,
+//       workouts: [newWorkout],
+//     });
+//   }
 
-  res.status(201).json(newWorkout);
-}
+//   res.status(201).json(newWorkout);
+// }
 
-function updateWorkout(req, res) {
-  const id = Number(req.params.id);
-  const { title, sets } = req.body;
+// function updateWorkout(req, res) {
+//   const id = Number(req.params.id);
+//   const { title, sets } = req.body;
 
-  for (const day of mockData) {
-    const workout = day.workouts.find((w) => w.id === id);
-    if (workout) {
-      if (title !== undefined) workout.title = title;
-      if (Array.isArray(sets))
-        workout.sets = sets.map((s) => ({
-          weight: Number(s.weight),
-          reps: Number(s.reps),
-        }));
+//   for (const day of mockData) {
+//     const workout = day.workouts.find((w) => w.id === id);
+//     if (workout) {
+//       if (title !== undefined) workout.title = title;
+//       if (Array.isArray(sets))
+//         workout.sets = sets.map((s) => ({
+//           weight: Number(s.weight),
+//           reps: Number(s.reps),
+//         }));
 
-      return res.json(workout);
-    }
-  }
+//       return res.json(workout);
+//     }
+//   }
 
-  res.status(404).json({ message: 'Workout not found' });
-}
+//   res.status(404).json({ message: 'Workout not found' });
+// }
 
-function deleteWorkouts(req, res) {
-  const id = Number(req.params.id);
+// function deleteWorkouts(req, res) {
+//   const id = Number(req.params.id);
 
-  for (const day of mockData) {
-    const index = day.workouts.findIndex((w) => w.id === id);
-    if (index !== -1) {
-      day.workouts.splice(index, 1);
-      return res.status(200).json({ message: 'Workout deleted', id });
-    }
-  }
+//   for (const day of mockData) {
+//     const index = day.workouts.findIndex((w) => w.id === id);
+//     if (index !== -1) {
+//       day.workouts.splice(index, 1);
+//       return res.status(200).json({ message: 'Workout deleted', id });
+//     }
+//   }
 
-  res.status(404).json({ message: 'Workout not found' });
-}
+//   res.status(404).json({ message: 'Workout not found' });
+// }
 
 export { getAllPosts, getSinglePost };
