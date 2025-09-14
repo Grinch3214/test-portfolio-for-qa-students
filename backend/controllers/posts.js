@@ -29,39 +29,40 @@ async function getSinglePost(req, res) {
   }
 }
 
-// function postWorkouts(req, res) {
-//   const { date, title, sets } = req.body;
+async function createPost(req, res) {
+  try {
+    const {
+      title,
+      body,
+      tags = [],
+      reactions = { likes: 0, dislikes: 0 },
+      views = 0,
+      user_id,
+    } = req.body;
 
-//   console.log(date, title, sets);
+    if (!title || !body || user_id === undefined) {
+      return res.status(400).json({
+        message: 'Missing required fields: title, body or user_id',
+      });
+    }
 
-//   if (!date || !title || !Array.isArray(sets)) {
-//     return res
-//       .status(400)
-//       .json({ message: 'Missing required fields: date, title, sets' });
-//   }
+    const result = await pool.query(
+      `
+        INSERT INTO posts (title, body, tags, reactions, views, user_id)
+        VALUES ($1, $2, $3, $4, $5, $6)
+        RETURNING *
+      `,
+      [title, body, tags, JSON.stringify(reactions), views, user_id]
+    );
 
-//   const day = mockData.find((d) => d.date === date);
-
-//   const newWorkout = {
-//     id: getNextId(),
-//     title,
-//     sets: sets.map((s) => ({
-//       weight: Number(s.weight),
-//       reps: Number(s.reps),
-//     })),
-//   };
-
-//   if (day) {
-//     day.workouts.push(newWorkout);
-//   } else {
-//     mockData.push({
-//       date,
-//       workouts: [newWorkout],
-//     });
-//   }
-
-//   res.status(201).json(newWorkout);
-// }
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Error creating post:', err);
+    res
+      .status(500)
+      .json({ message: 'Error creating post', error: err.message });
+  }
+}
 
 // function updateWorkout(req, res) {
 //   const id = Number(req.params.id);
@@ -98,4 +99,4 @@ async function getSinglePost(req, res) {
 //   res.status(404).json({ message: 'Workout not found' });
 // }
 
-export { getAllPosts, getSinglePost };
+export { getAllPosts, getSinglePost, createPost };
