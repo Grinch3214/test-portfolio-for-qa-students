@@ -1,4 +1,4 @@
-import { pool } from '../bd.js';
+import { pool } from '../db.js';
 import jwt from 'jsonwebtoken';
 
 async function login(req, res) {

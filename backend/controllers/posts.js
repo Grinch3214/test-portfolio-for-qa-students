@@ -1,54 +1,68 @@
 import { mockData, getNextId } from '../mockdata.js';
+import { pool } from '../db.js';
 
-function getAllPosts(req, res) {
-  res.json(mockData);
-}
-
-function getSinglePost(req, res) {
-  const { id } = req.params;
-
-  const post = mockData.find((item) => item.id === id);
-
-  if (post) {
-    res.json(day);
-  } else {
-    res.status(404).json({ message: 'Post not found' });
+async function getAllPosts(req, res) {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM posts ORDER BY created_at DESC'
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error loading posts:', err);
+    res.status(500).json({ message: 'Error load posts', error: err.message });
   }
 }
 
-// function postWorkouts(req, res) {
-//   const { date, title, sets } = req.body;
+async function getSinglePost(req, res) {
+  try {
+    const { id } = req.params;
+    const result = await pool.query('SELECT * FROM posts WHERE id = $1', [id]);
 
-//   console.log(date, title, sets);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
 
-//   if (!date || !title || !Array.isArray(sets)) {
-//     return res
-//       .status(400)
-//       .json({ message: 'Missing required fields: date, title, sets' });
-//   }
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Error searching post:', err);
+    res.status(500).json({ message: 'Error search post', error: err.message });
+  }
+}
 
-//   const day = mockData.find((d) => d.date === date);
+async function createPost(req, res) {
+  try {
+    const {
+      title,
+      body,
+      tags = [],
+      reactions = { likes: 0, dislikes: 0 },
+      views = 0,
+      user_id,
+    } = req.body;
 
-//   const newWorkout = {
-//     id: getNextId(),
-//     title,
-//     sets: sets.map((s) => ({
-//       weight: Number(s.weight),
-//       reps: Number(s.reps),
-//     })),
-//   };
+    if (!title || !body || user_id === undefined) {
+      return res.status(400).json({
+        message: 'Missing required fields: title, body or user_id',
+      });
+    }
 
-//   if (day) {
-//     day.workouts.push(newWorkout);
-//   } else {
-//     mockData.push({
-//       date,
-//       workouts: [newWorkout],
-//     });
-//   }
+    const result = await pool.query(
+      `
+        INSERT INTO posts (title, body, tags, reactions, views, user_id)
+        VALUES ($1, $2, $3, $4, $5, $6)
+        RETURNING *
+      `,
+      [title, body, tags, JSON.stringify(reactions), views, user_id]
+    );
 
-//   res.status(201).json(newWorkout);
-// }
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Error creating post:', err);
+    res
+      .status(500)
+      .json({ message: 'Error creating post', error: err.message });
+  }
+}
 
 // function updateWorkout(req, res) {
 //   const id = Number(req.params.id);
@@ -85,4 +99,4 @@ function getSinglePost(req, res) {
 //   res.status(404).json({ message: 'Workout not found' });
 // }
 
-export { getAllPosts, getSinglePost };
+export { getAllPosts, getSinglePost, createPost };
