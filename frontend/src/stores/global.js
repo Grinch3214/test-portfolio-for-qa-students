@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
+import axios from 'axios';
 
 export const useGlobalStore = defineStore('global', () => {
   const isOpenModal = ref(false);
@@ -8,6 +9,8 @@ export const useGlobalStore = defineStore('global', () => {
   const password = ref('');
   const token = ref('');
   const isAuthenticated = ref(false);
+
+  const posts = ref([]);
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -22,58 +25,56 @@ export const useGlobalStore = defineStore('global', () => {
 
   async function signIn({ email: inputEmail, password: inputPassword }) {
     try {
-      const response = await fetch(`${apiUrl}/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const response = await axios.post(
+        `${apiUrl}/login`,
+        {
           email: inputEmail || email.value,
           password: inputPassword || password.value,
-        }),
-        credentials: 'include',
-      });
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      );
 
-      if (!response.ok) {
-        throw new Error('Wrong email or password');
-      }
-
-      const data = await response.json();
+      const data = response.data;
       document.cookie = `auth_token=${data.token}; max-age=3600; Secure; SameSite=Strict`;
       isAuthenticated.value = true;
       return data;
     } catch (error) {
-      console.error('Wrong login:', error);
-      throw error;
+      console.error('Wrong login:', error.response?.data || error.message);
+      throw new Error('Wrong email or password');
     }
   }
 
   async function checkAuth() {
     const cookieToken = getTokenFromCookie();
     console.log(cookieToken);
+
     if (!cookieToken) {
       isAuthenticated.value = false;
       return;
     }
 
     try {
-      const response = await fetch(`${apiUrl}/check-auth`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          token: cookieToken,
-        },
-        credentials: 'include',
-      });
+      const response = await axios.post(
+        `${apiUrl}/check-auth`,
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            token: cookieToken,
+          },
+          withCredentials: true,
+        }
+      );
 
-      if (!response.ok) {
-        throw new Error('Auth fail');
-      }
-
-      const data = await response.json();
+      const data = response.data;
       isAuthenticated.value = data.authenticated;
     } catch (error) {
-      console.error('Auth error:', error);
+      console.error('Auth error:', error.response?.data || error.message);
       isAuthenticated.value = false;
       document.cookie = 'auth_token=; max-age=0; path=/';
     }
@@ -84,6 +85,7 @@ export const useGlobalStore = defineStore('global', () => {
     try {
       const response = await axios.get(url);
       posts.value = response.data;
+      return response.data;
     } catch (err) {
       console.error(err);
     }
@@ -91,11 +93,14 @@ export const useGlobalStore = defineStore('global', () => {
 
   return {
     isOpenModal,
+    isAuthenticated,
     email,
     password,
     token,
+    posts,
+
     signIn,
-    isAuthenticated,
     checkAuth,
+    getAllPosts,
   };
 });
