@@ -1,14 +1,45 @@
 <template>
   <main>
-    <section>
+    <section class="posts">
       <div class="container">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt sint
-        doloremque magnam aliquid, praesentium recusandae asperiores molestias
-        exercitationem tenetur et. Error nostrum iure excepturi quod sit fugiat
-        magnam est consectetur!
+        <h2 class="posts-title">Posts</h2>
+        <div
+          v-for="post in globalStore.posts"
+          :key="post.id"
+          class="posts-cards"
+        >
+          <Post :post="post" />
+        </div>
       </div>
     </section>
   </main>
 </template>
 
-<style></style>
+<script setup>
+import { useGlobalStore } from '@/stores/global.js';
+import { onMounted } from 'vue';
+import Post from '@/components/Post.vue';
+
+const globalStore = useGlobalStore();
+
+onMounted(async () => {
+  await globalStore.getAllPosts();
+});
+</script>
+
+<style setup>
+.posts {
+  padding: 50px 0;
+}
+
+.posts-title {
+  font-size: 37px;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+}
+
+.posts-cards {
+  display: grid;
+  gap: 30px;
+}
+</style>
