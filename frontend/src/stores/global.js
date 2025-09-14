@@ -79,6 +79,16 @@ export const useGlobalStore = defineStore('global', () => {
     }
   }
 
+  async function getAllPosts() {
+    const url = `${apiUrl}/posts`;
+    try {
+      const response = await axios.get(url);
+      posts.value = response.data;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return {
     isOpenModal,
     email,

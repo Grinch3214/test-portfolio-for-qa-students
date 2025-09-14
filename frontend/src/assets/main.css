@@ -5,6 +5,7 @@ body {
 	background: var(--main-color);
 	color: var(--text-color);
 	font-size: 22px;
+	font-weight: 500;
 }
 
 body.modal-open {
