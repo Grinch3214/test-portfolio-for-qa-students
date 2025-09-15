@@ -4,7 +4,11 @@
       <div class="container">
         <div class="posts-inner">
           <h2 class="posts-title">Posts</h2>
-          <button class="posts-action btn" @click="createNewPost">
+          <button
+            v-if="globalStore.isAuthenticated"
+            class="posts-action btn"
+            @click="createNewPost"
+          >
             Create Post
           </button>
         </div>

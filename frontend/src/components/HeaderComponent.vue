@@ -9,8 +9,8 @@
           class="header-link"
           href="#"
           id="login"
-          @click.prevent="globalStore.isOpenModal = true"
-          >Login</a
+          @click.prevent="handleLogin"
+          >{{ isAuth }}</a
         >
         <button class="header-sheme" @click="changeThemeMode">
           <svg class="header-sheme-icon">
@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
 import { RouterLink } from 'vue-router';
 import { useGlobalStore } from '../stores/global';
 
@@ -31,6 +31,16 @@ const globalStore = useGlobalStore();
 
 const isHeaderActive = ref(false);
 const isDarkMode = ref(true);
+
+const isAuth = computed(() =>
+  globalStore.isAuthenticated ? 'Logout' : 'Login'
+);
+
+function handleLogin() {
+  !globalStore.isAuthenticated
+    ? (globalStore.isOpenModal = true)
+    : globalStore.logout();
+}
 
 function handleScroll() {
   isHeaderActive.value = window.scrollY >= 40;

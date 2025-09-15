@@ -51,6 +51,15 @@ export const useGlobalStore = defineStore('global', () => {
     }
   }
 
+  function logout() {
+    document.cookie = 'auth_token=; max-age=0; Secure; SameSite=Strict';
+
+    isAuthenticated.value = false;
+    currentUserId.value = null;
+
+    console.log('User logged out successfully');
+  }
+
   async function checkAuth() {
     const cookieToken = getTokenFromCookie();
     console.log(cookieToken);
@@ -114,6 +123,7 @@ export const useGlobalStore = defineStore('global', () => {
     currentUserId,
 
     signIn,
+    logout,
     checkAuth,
     getAllPosts,
     createNewPost,
