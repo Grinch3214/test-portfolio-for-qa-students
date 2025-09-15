@@ -35,7 +35,7 @@
     </div>
 
     <div class="form-actions">
-      <button class="form-action btn" @click="">Save</button>
+      <button class="form-action btn" @click="save">Save</button>
       <button class="form-cancel btn" @click="">Cancel</button>
     </div>
   </div>
@@ -48,6 +48,8 @@ import { ref } from 'vue';
 const props = defineProps<{
   post?: Post;
 }>();
+
+const emit = defineEmits(['save']);
 
 const tags = ref([
   { name: 'History', value: Tags.HISTORY, active: false },
@@ -76,6 +78,10 @@ const formData = ref<PostForm>({
 function toggleTag(tag) {
   tag.active = !tag.active;
   formData.value.tags = tags.value.filter((t) => t.active).map((t) => t.value);
+}
+
+function save() {
+  emit('save', formData.value);
 }
 </script>
 
