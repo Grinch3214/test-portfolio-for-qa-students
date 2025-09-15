@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { useGlobalStore } from '@/stores/global';
 import HomeView from '@/views/HomeView.vue';
 import BlogView from '@/views/BlogView.vue';
+import CreatePostView from '@/views/CreatePostView.vue';
+import PostView from '@/views/PostView.vue';
 import NotFound from '@/components/NotFound.vue';
 
 const router = createRouter({
@@ -17,11 +20,33 @@ const router = createRouter({
       component: BlogView,
     },
     {
+      path: '/blog/:id',
+      name: 'post',
+      component: PostView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/blog/new-post',
+      name: 'new-post',
+      component: CreatePostView,
+      meta: { requiresAuth: true },
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: NotFound,
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const globalStore = useGlobalStore();
+
+  if (to.meta.requiresAuth && !globalStore.isAuthenticated) {
+    next({ name: 'home' });
+  } else {
+    next();
+  }
 });
 
 export default router;

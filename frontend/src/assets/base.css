@@ -85,7 +85,9 @@ time,
 mark,
 audio,
 video,
-button {
+button,
+textarea,
+input {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -133,17 +135,20 @@ button {
 
 :root {
 	--brand-color: #24A9EB;
+	--hover-brand-color: #63bce9;
 	--main-color: #0C151D;
 	--text-color: #fff;
 	--border-color: #A3ABB2;
 	--input-color: #3D3D3D;
+	--hover-input-color: #353535;
 	--overlay-color: rgba(255, 255, 255, .4)
 }
 
 [data-theme="light"] {
 	--main-color: #eae5e5;
 	--text-color: #0C151D;
-	--input-color: #dbdcde;
+	--input-color: #cacbcc;
+	--hover-input-color: #c7c7c7;
 	--border-color: #3D3D3D;
 	--overlay-color: rgba(0, 0, 0, .4)
 }

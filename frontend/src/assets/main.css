@@ -12,6 +12,11 @@ body.modal-open {
 	overflow: hidden;
 }
 
+input:focus,
+textarea:focus {
+	box-shadow: 0 0 0 1px var(--hover-brand-color) !important;
+}
+
 #app {
 	display: flex;
 	flex-flow: column;
@@ -31,6 +36,23 @@ main {
 .footer {
 	padding: 50px 0;
 	text-align: center;
+}
+
+.btn {
+	--main-color: #fff;
+	min-width: 290px;
+	border-radius: 10px;
+	text-align: center;
+	text-decoration: none;
+	padding: 20px 29px;
+	background: var(--brand-color);
+	color: var(--main-color);
+	cursor: pointer;
+	transition: 0.2s linear;
+}
+
+.btn:hover {
+	background: var(--hover-brand-color);
 }
 
 .sonner {

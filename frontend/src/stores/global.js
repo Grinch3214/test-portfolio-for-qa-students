@@ -9,6 +9,7 @@ export const useGlobalStore = defineStore('global', () => {
   const password = ref('');
   const token = ref('');
   const isAuthenticated = ref(false);
+  const currentUserId = ref(null);
 
   const posts = ref([]);
 
@@ -42,11 +43,22 @@ export const useGlobalStore = defineStore('global', () => {
       const data = response.data;
       document.cookie = `auth_token=${data.token}; max-age=3600; Secure; SameSite=Strict`;
       isAuthenticated.value = true;
+      currentUserId.value = data.id;
       return data;
     } catch (error) {
       console.error('Wrong login:', error.response?.data || error.message);
       throw new Error('Wrong email or password');
     }
+  }
+
+  function logout() {
+    document.cookie =
+      'auth_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+
+    isAuthenticated.value = false;
+    currentUserId.value = null;
+
+    console.log('User logged out successfully');
   }
 
   async function checkAuth() {
@@ -73,10 +85,12 @@ export const useGlobalStore = defineStore('global', () => {
 
       const data = response.data;
       isAuthenticated.value = data.authenticated;
+      currentUserId.value = data.user.id;
     } catch (error) {
       console.error('Auth error:', error.response?.data || error.message);
       isAuthenticated.value = false;
-      document.cookie = 'auth_token=; max-age=0; path=/';
+      document.cookie =
+        'auth_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
     }
   }
 
@@ -91,6 +105,25 @@ export const useGlobalStore = defineStore('global', () => {
     }
   }
 
+  async function getSinglePost(id) {
+    try {
+      const response = await axios.get(`${apiUrl}/posts/${id}`);
+      return response;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function createNewPost(body) {
+    const url = `${apiUrl}/posts/`;
+    try {
+      const response = await axios.post(url, body);
+      return response;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return {
     isOpenModal,
     isAuthenticated,
@@ -98,9 +131,13 @@ export const useGlobalStore = defineStore('global', () => {
     password,
     token,
     posts,
+    currentUserId,
 
     signIn,
+    logout,
     checkAuth,
     getAllPosts,
+    getSinglePost,
+    createNewPost,
   };
 });
