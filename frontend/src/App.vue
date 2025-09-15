@@ -10,13 +10,14 @@
   </footer>
   <DialogModal
     :is-open="globalStore.isOpenModal"
+    :clear-fields="clearFields"
     @update:is-open="(val) => (globalStore.isOpenModal = val)"
     @submit="formData"
   />
 </template>
 
 <script setup>
-import { watch, onMounted } from 'vue';
+import { watch, ref, onMounted } from 'vue';
 import { RouterView } from 'vue-router';
 import DialogModal from './components/DialogModal.vue';
 import { useGlobalStore } from './stores/global';
@@ -25,9 +26,16 @@ import HeaderComponent from './components/HeaderComponent.vue';
 const globalStore = useGlobalStore();
 const body = document.querySelector('body');
 
-function formData(data) {
-  console.log(data);
-  globalStore.signIn(data);
+const clearFields = ref(false);
+
+async function formData(data) {
+  // TODO: need to create sonner
+  clearFields.value = false;
+  const res = await globalStore.signIn(data);
+
+  if (res) {
+    clearFields.value = true;
+  }
 }
 
 watch(
@@ -41,8 +49,6 @@ watch(
 
 onMounted(async () => {
   await globalStore.checkAuth();
-
-  console.log('isAuthenticated: ', globalStore.isAuthenticated);
 });
 </script>
 

@@ -35,6 +35,7 @@ import { ref, watch } from 'vue';
 interface Props {
   isOpen?: boolean;
   title?: string;
+  clearFields?: boolean;
 }
 
 interface FormData {
@@ -58,6 +59,15 @@ const handleSubmit = () => {
   emit('submit', { ...formData.value });
   closeDialog();
 };
+
+watch(
+  () => props.clearFields,
+  () => {
+    if (props.clearFields) {
+      formData.value = { email: '', password: '' };
+    }
+  }
+);
 
 watch(
   () => props.isOpen,
