@@ -3,12 +3,8 @@
     <section class="posts">
       <div class="container">
         <h2 class="posts-title">Posts</h2>
-        <div
-          v-for="post in globalStore.posts"
-          :key="post.id"
-          class="posts-cards"
-        >
-          <Post :post="post" />
+        <div class="posts-cards">
+          <Post v-for="post in globalStore.posts" :key="post.id" :post="post" />
         </div>
       </div>
     </section>
