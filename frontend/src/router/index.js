@@ -23,7 +23,6 @@ const router = createRouter({
       path: '/blog/:id',
       name: 'post',
       component: PostView,
-      meta: { requiresAuth: true },
     },
     {
       path: '/blog/new-post',

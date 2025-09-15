@@ -1,10 +1,6 @@
 <template>
   <article class="post">
-    <h3
-      class="post-title"
-      :style="{ cursor: globalStore.isAuthenticated ? 'pointer' : 'default' }"
-      @click="postId"
-    >
+    <h3 class="post-title" @click="postId">
       {{ post.title }}
     </h3>
     <div class="post-tags">
@@ -48,10 +44,7 @@ const emit = defineEmits(['post-id']);
 const globalStore = useGlobalStore();
 
 function postId() {
-  if (globalStore.isAuthenticated) {
-    return emit('post-id', props.post.id);
-  }
-  return;
+  return emit('post-id', props.post.id);
 }
 </script>
 
@@ -65,6 +58,7 @@ function postId() {
 .post-title {
   font-size: 42px;
   margin-bottom: 15px;
+  cursor: pointer;
 }
 .post-tags {
   margin-bottom: 30px;
