@@ -14,7 +14,12 @@
         </div>
 
         <div class="posts-cards">
-          <Post v-for="post in globalStore.posts" :key="post.id" :post="post" />
+          <Post
+            v-for="post in globalStore.posts"
+            :key="post.id"
+            :post="post"
+            @post-id="(id) => router.push(`/blog/${id}`)"
+          />
         </div>
       </div>
     </section>

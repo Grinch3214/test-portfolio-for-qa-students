@@ -1,6 +1,12 @@
 <template>
   <article class="post">
-    <h3 class="post-title">{{ post.title }}</h3>
+    <h3
+      class="post-title"
+      :style="{ cursor: globalStore.isAuthenticated ? 'pointer' : 'default' }"
+      @click="postId"
+    >
+      {{ post.title }}
+    </h3>
     <div class="post-tags">
       <span v-for="(tag, index) in post.tags" :key="index" class="post-tag">{{
         tag
@@ -31,9 +37,22 @@
 </template>
 
 <script setup>
+import { useGlobalStore } from '@/stores/global';
+
 const props = defineProps({
   post: Object,
 });
+
+const emit = defineEmits(['post-id']);
+
+const globalStore = useGlobalStore();
+
+function postId() {
+  if (globalStore.isAuthenticated) {
+    return emit('post-id', props.post.id);
+  }
+  return;
+}
 </script>
 
 <style scoped>

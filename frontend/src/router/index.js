@@ -3,6 +3,7 @@ import { useGlobalStore } from '@/stores/global';
 import HomeView from '@/views/HomeView.vue';
 import BlogView from '@/views/BlogView.vue';
 import CreatePostView from '@/views/CreatePostView.vue';
+import PostView from '@/views/PostView.vue';
 import NotFound from '@/components/NotFound.vue';
 
 const router = createRouter({
@@ -17,6 +18,12 @@ const router = createRouter({
       path: '/blog',
       name: 'blog',
       component: BlogView,
+    },
+    {
+      path: '/blog/:id',
+      name: 'post',
+      component: PostView,
+      meta: { requiresAuth: true },
     },
     {
       path: '/blog/new-post',

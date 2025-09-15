@@ -1,4 +1,3 @@
-import { mockData, getNextId } from '../mockdata.js';
 import { pool } from '../db.js';
 
 async function getAllPosts(req, res) {

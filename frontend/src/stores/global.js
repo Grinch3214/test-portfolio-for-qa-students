@@ -52,7 +52,8 @@ export const useGlobalStore = defineStore('global', () => {
   }
 
   function logout() {
-    document.cookie = 'auth_token=; max-age=0; Secure; SameSite=Strict';
+    document.cookie =
+      'auth_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
 
     isAuthenticated.value = false;
     currentUserId.value = null;
@@ -88,7 +89,8 @@ export const useGlobalStore = defineStore('global', () => {
     } catch (error) {
       console.error('Auth error:', error.response?.data || error.message);
       isAuthenticated.value = false;
-      document.cookie = 'auth_token=; max-age=0; path=/';
+      document.cookie =
+        'auth_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
     }
   }
 
@@ -98,6 +100,15 @@ export const useGlobalStore = defineStore('global', () => {
       const response = await axios.get(url);
       posts.value = response.data;
       return response.data;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function getSinglePost(id) {
+    try {
+      const response = await axios.get(`${apiUrl}/posts/${id}`);
+      return response;
     } catch (err) {
       console.error(err);
     }
@@ -126,6 +137,7 @@ export const useGlobalStore = defineStore('global', () => {
     logout,
     checkAuth,
     getAllPosts,
+    getSinglePost,
     createNewPost,
   };
 });
