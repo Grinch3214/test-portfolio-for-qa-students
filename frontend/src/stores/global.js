@@ -123,6 +123,17 @@ export const useGlobalStore = defineStore('global', () => {
     }
   }
 
+  async function incrementPostView(id) {
+    const url = `${apiUrl}/posts/${id}/views`;
+
+    try {
+      const response = await axios.patch(url);
+      return response;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return {
     isOpenModal,
     isAuthenticated,
@@ -138,5 +149,6 @@ export const useGlobalStore = defineStore('global', () => {
     getAllPosts,
     getSinglePost,
     createNewPost,
+    incrementPostView,
   };
 });
