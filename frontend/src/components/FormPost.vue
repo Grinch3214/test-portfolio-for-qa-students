@@ -24,7 +24,7 @@
     <p class="form-title">Selected tags for post</p>
     <div class="form-tags">
       <button
-        class="form-tag"
+        class="badge"
         v-for="tag in tags"
         :value="tag.value"
         :class="{ active: tag.active }"
@@ -123,24 +123,11 @@ textarea.form-input {
   flex-flow: wrap;
   gap: 10px;
 }
-.form-tag {
-  color: var(--text-color);
-  background: var(--input-color);
-  font-size: 14px;
-  border-radius: 50px;
-  padding: 8px 19px;
-  text-transform: capitalize;
-  cursor: pointer;
-}
 
-.form-tag:hover {
-  opacity: 0.9;
-}
-
-.form-tag.active {
+/* .form-tag.active {
   --text-color: #fff;
   background: var(--brand-color);
-}
+} */
 
 .form-actions {
   margin-top: 30px;

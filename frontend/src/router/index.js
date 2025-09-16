@@ -38,14 +38,15 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const globalStore = useGlobalStore();
 
+  await globalStore.checkAuth();
+
   if (to.meta.requiresAuth && !globalStore.isAuthenticated) {
-    next({ name: 'home' });
-  } else {
-    next();
+    return next({ name: 'home' });
   }
+  next();
 });
 
 export default router;

@@ -141,7 +141,9 @@ button {
 	--border-color: #A3ABB2;
 	--input-color: #3D3D3D;
 	--hover-input-color: #353535;
-	--overlay-color: rgba(255, 255, 255, .4)
+	--overlay-color: rgba(255, 255, 255, .4);
+	--error-color: rgb(128, 18, 18);
+	--hover-error-color: rgb(146, 21, 21);
 }
 
 [data-theme="light"] {
@@ -150,7 +152,9 @@ button {
 	--input-color: #cacbcc;
 	--hover-input-color: #c7c7c7;
 	--border-color: #3D3D3D;
-	--overlay-color: rgba(0, 0, 0, .4)
+	--overlay-color: rgba(0, 0, 0, .4);
+	--error-color: rgb(192, 29, 29);
+	--hover-error-color: rgb(206, 36, 36);
 }
 
 @font-face {
