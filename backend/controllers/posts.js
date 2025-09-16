@@ -101,7 +101,6 @@ async function incrementPostViews(req, res) {
 
     res.json({
       message: 'View count incremented',
-      post: result.rows[0],
     });
   } catch (err) {
     console.error('Error incrementing post views:', err);
