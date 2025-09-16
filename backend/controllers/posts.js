@@ -15,7 +15,26 @@ async function getAllPosts(req, res) {
 async function getSinglePost(req, res) {
   try {
     const { id } = req.params;
-    const result = await pool.query('SELECT * FROM posts WHERE id = $1', [id]);
+    // const result = await pool.query('SELECT * FROM posts WHERE id = $1', [id]);
+    const result = await pool.query(
+      `
+				SELECT 
+					p.id,
+					p.title,
+					p.body,
+					p.tags,
+					p.reactions,
+					p.views,
+					p.user_id,
+					p.created_at,
+					p.updated_at,
+					u.fullname AS author_name
+				FROM posts p
+				JOIN users u ON p.user_id = u.id
+				WHERE p.id = $1
+				`,
+      [id]
+    );
 
     if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Post not found' });
