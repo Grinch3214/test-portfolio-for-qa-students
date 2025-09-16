@@ -38,12 +38,6 @@ const globalStore = useGlobalStore();
 
 const post = ref<Post | null>(null);
 
-onMounted(async () => {
-  const res = await globalStore.getSinglePost(route.params.id);
-
-  post.value = res.data;
-});
-
 function formatDate(isoDateString) {
   const date = new Date(isoDateString);
 
@@ -53,6 +47,13 @@ function formatDate(isoDateString) {
 
   return `${day}.${month}.${year}`;
 }
+
+onMounted(async () => {
+  const res = await globalStore.getSinglePost(route.params.id);
+  post.value = res.data;
+
+  await globalStore.incrementPostView(route.params.id);
+});
 </script>
 
 <style scoped>
