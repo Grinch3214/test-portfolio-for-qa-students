@@ -41,7 +41,8 @@ export const useGlobalStore = defineStore('global', () => {
       );
 
       const data = response.data;
-      document.cookie = `auth_token=${data.token}; max-age=3600; Secure; SameSite=Strict`;
+      document.cookie = `auth_token=${data.token}; max-age=3600; path=/; Secure; SameSite=Strict`;
+      // document.cookie = `auth_token=${data.token}; max-age=3600; Secure; SameSite=Strict`;
       isAuthenticated.value = true;
       currentUserId.value = data.id;
       return data;
@@ -52,8 +53,7 @@ export const useGlobalStore = defineStore('global', () => {
   }
 
   function logout() {
-    document.cookie =
-      'auth_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+    document.cookie = 'auth_token=; max-age=0; path=/; Secure; SameSite=Strict';
 
     isAuthenticated.value = false;
     currentUserId.value = null;
@@ -63,7 +63,6 @@ export const useGlobalStore = defineStore('global', () => {
 
   async function checkAuth() {
     const cookieToken = getTokenFromCookie();
-    console.log(cookieToken);
 
     if (!cookieToken) {
       isAuthenticated.value = false;
@@ -115,7 +114,7 @@ export const useGlobalStore = defineStore('global', () => {
   }
 
   async function createNewPost(body) {
-    const url = `${apiUrl}/posts/`;
+    const url = `${apiUrl}/posts`;
     try {
       const response = await axios.post(url, body);
       return response;

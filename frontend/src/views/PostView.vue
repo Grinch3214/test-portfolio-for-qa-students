@@ -3,9 +3,14 @@
     <article v-if="post" class="post">
       <header class="post-header">
         <h1 class="post-title">{{ post.title }}</h1>
+
         <div class="post-meta">
           <p class="post-author"><span>Author:</span> {{ post.author_name }}</p>
           <p class="post-date">{{ formatDate(post.updated_at) }}</p>
+        </div>
+
+        <div class="post-badges">
+          <span v-for="tag in post.tags" class="badge active">{{ tag }}</span>
         </div>
       </header>
 
@@ -66,6 +71,12 @@ function formatDate(isoDateString) {
   font-size: 42px;
   margin-bottom: 30px;
   line-height: 1.3;
+}
+.post-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 30px 0 0;
 }
 .post-meta {
   display: flex;
