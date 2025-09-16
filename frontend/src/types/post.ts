@@ -13,6 +13,7 @@ export interface Post {
   reactions: Reactions;
   created_at: string;
   updated_at: string;
+  author_name?: string;
 }
 
 export interface PostForm {
