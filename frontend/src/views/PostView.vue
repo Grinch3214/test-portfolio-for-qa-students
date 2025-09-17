@@ -20,8 +20,12 @@
 
       <footer class="post-footer">
         <router-link to="/blog" class="btn btn-gray">Back</router-link>
-        <button class="btn">Edit</button>
-        <button class="btn btn-error" @click="isModalShow = true">
+        <button v-if="globalStore.isAuthenticated" class="btn">Edit</button>
+        <button
+          v-if="globalStore.isAuthenticated"
+          class="btn btn-error"
+          @click="isModalShow = true"
+        >
           Delete
         </button>
       </footer>
