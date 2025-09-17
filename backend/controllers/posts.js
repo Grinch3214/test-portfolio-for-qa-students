@@ -111,6 +111,30 @@ async function incrementPostViews(req, res) {
   }
 }
 
+async function deletePost(req, res) {
+  try {
+    const { id } = req.params;
+
+    const result = await pool.query(
+      'DELETE FROM posts WHERE id = $1 RETURNING *',
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        message: `Post with ID ${id} not found`,
+      });
+    }
+
+    res.json({
+      message: `Post with ID ${id} deleted`,
+    });
+  } catch (err) {
+    console.error('Error deleting post:', err);
+    res.status(400).json({ message: 'Wrong ID post', error: err.message });
+  }
+}
+
 // function updateWorkout(req, res) {
 //   const id = Number(req.params.id);
 //   const { title, sets } = req.body;
@@ -146,4 +170,10 @@ async function incrementPostViews(req, res) {
 //   res.status(404).json({ message: 'Workout not found' });
 // }
 
-export { getAllPosts, getSinglePost, createPost, incrementPostViews };
+export {
+  getAllPosts,
+  getSinglePost,
+  createPost,
+  incrementPostViews,
+  deletePost,
+};
