@@ -115,8 +115,15 @@ export const useGlobalStore = defineStore('global', () => {
 
   async function createNewPost(body) {
     const url = `${apiUrl}/posts`;
+    const cookieToken = getTokenFromCookie();
     try {
-      const response = await axios.post(url, body);
+      const response = await axios.post(url, body, {
+        headers: {
+          'Content-Type': 'application/json',
+          token: cookieToken,
+        },
+        withCredentials: true,
+      });
       return response;
     } catch (err) {
       console.error(err);
@@ -138,8 +145,6 @@ export const useGlobalStore = defineStore('global', () => {
     const url = `${apiUrl}/posts/${id}`;
     const cookieToken = getTokenFromCookie();
 
-    console.log('Token:', cookieToken);
-
     try {
       const response = await axios.delete(url, {
         headers: {
@@ -150,9 +155,9 @@ export const useGlobalStore = defineStore('global', () => {
       });
 
       if (response.data) {
-        const deletedId = response.data.deletedPost.id;
+        const deletedId = response.data.id;
         console.log(deletedId);
-        posts.value = posts.value.filter((post) => post.id !== deletedId);
+        posts.value = posts.value.filter((post) => post.id !== +deletedId);
         return response.data;
       }
     } catch (err) {

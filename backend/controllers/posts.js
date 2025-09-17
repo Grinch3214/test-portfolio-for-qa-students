@@ -128,6 +128,7 @@ async function deletePost(req, res) {
 
     res.json({
       message: `Post with ID ${id} deleted`,
+      id,
     });
   } catch (err) {
     console.error('Error deleting post:', err);

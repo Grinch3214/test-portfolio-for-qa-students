@@ -73,8 +73,7 @@ async function deletePost(id) {
   try {
     const res = await globalStore.deletePost(id);
 
-    console.log(res);
-    if (res) {
+    if (res.id) {
       router.push('/blog');
     }
   } catch (err) {
