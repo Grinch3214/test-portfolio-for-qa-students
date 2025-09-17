@@ -134,6 +134,32 @@ export const useGlobalStore = defineStore('global', () => {
     }
   }
 
+  async function deletePost(id) {
+    const url = `${apiUrl}/posts/${id}`;
+    const cookieToken = getTokenFromCookie();
+
+    console.log('Token:', cookieToken);
+
+    try {
+      const response = await axios.delete(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          token: cookieToken,
+        },
+        withCredentials: true,
+      });
+
+      if (response.data) {
+        const deletedId = response.data.deletedPost.id;
+        console.log(deletedId);
+        posts.value = posts.value.filter((post) => post.id !== deletedId);
+        return response.data;
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return {
     isOpenModal,
     isAuthenticated,
@@ -150,5 +176,6 @@ export const useGlobalStore = defineStore('global', () => {
     getSinglePost,
     createNewPost,
     incrementPostView,
+    deletePost,
   };
 });
