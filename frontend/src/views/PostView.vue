@@ -21,10 +21,27 @@
       <footer class="post-footer">
         <router-link to="/blog" class="btn btn-gray">Back</router-link>
         <button class="btn">Edit</button>
-        <button class="btn btn-error">Delete</button>
+        <button class="btn btn-error" @click="isModalShow = true">
+          Delete
+        </button>
       </footer>
     </article>
   </div>
+
+  <Modal
+    v-if="isModalShow"
+    title="Do you want delete post?"
+    @close="isModalShow = false"
+  >
+    <template #body>
+      <div class="modal-body">
+        <button class="btn" @click="deletePost(post.id)">Yes</button>
+        <button class="btn btn-error" @click="isModalShow = false">
+          Cancel
+        </button>
+      </div>
+    </template>
+  </Modal>
 </template>
 
 <script setup lang="ts">
@@ -32,11 +49,15 @@ import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useGlobalStore } from '@/stores/global';
 import { Post } from '@/types/post';
+import Modal from '@/components/Modal.vue';
 
 const route = useRoute();
+const router = useRouter();
+
 const globalStore = useGlobalStore();
 
 const post = ref<Post | null>(null);
+const isModalShow = ref<boolean>(false);
 
 function formatDate(isoDateString) {
   const date = new Date(isoDateString);
@@ -46,6 +67,20 @@ function formatDate(isoDateString) {
   const year = date.getFullYear();
 
   return `${day}.${month}.${year}`;
+}
+
+async function deletePost(id) {
+  try {
+    const res = await globalStore.deletePost(id);
+
+    if (res.id) {
+      router.push('/blog');
+    }
+  } catch (err) {
+    console.log('deletePost err: ', err);
+  } finally {
+    isModalShow.value = false;
+  }
 }
 
 onMounted(async () => {
@@ -59,6 +94,7 @@ onMounted(async () => {
 <style scoped>
 .post-view {
   max-width: 1000px;
+  width: 100%;
   margin: 0 auto;
   flex: 1;
 }
@@ -111,5 +147,17 @@ onMounted(async () => {
   padding-bottom: 15px;
 }
 .back-link {
+}
+
+.modal-body {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  margin-top: 40px;
+}
+.modal-body button {
+  min-width: auto;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 </style>
