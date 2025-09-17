@@ -10,12 +10,12 @@
       @submit.prevent="handleSubmit"
     >
       <label>
-        <p>Email</p>
+        <span>Email</span>
         <input v-model="formData.email" type="text" name="email" />
       </label>
 
       <label>
-        <p>Password</p>
+        <span>Password</span>
         <input
           v-model="formData.password"
           type="text"

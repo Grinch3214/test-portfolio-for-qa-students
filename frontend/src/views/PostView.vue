@@ -59,6 +59,7 @@ onMounted(async () => {
 <style scoped>
 .post-view {
   max-width: 1000px;
+  width: 100%;
   margin: 0 auto;
   flex: 1;
 }
