@@ -1,4 +1,5 @@
 import express from 'express';
+import authMiddleware from '../middlewares/authMiddleware.js';
 import {
   getAllPosts,
   getSinglePost,
@@ -11,8 +12,8 @@ const router = express.Router();
 router.get('/', getAllPosts);
 router.get('/:id', getSinglePost);
 // router.get('/:date', getDateWorkouts);
-router.post('/', createPost);
-router.patch('/:id/views', incrementPostViews);
+router.post('/', authMiddleware, createPost);
+router.patch('/:id/views', authMiddleware, incrementPostViews);
 // router.patch('/:id', updateWorkout);
 // router.delete('/:id', deleteWorkouts);
 
