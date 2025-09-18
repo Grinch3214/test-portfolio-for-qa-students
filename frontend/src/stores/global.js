@@ -12,6 +12,7 @@ export const useGlobalStore = defineStore('global', () => {
   const currentUserId = ref(null);
 
   const posts = ref([]);
+  const post = ref(null);
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -107,6 +108,7 @@ export const useGlobalStore = defineStore('global', () => {
   async function getSinglePost(id) {
     try {
       const response = await axios.get(`${apiUrl}/posts/${id}`);
+      post.value = response.data;
       return response;
     } catch (err) {
       console.error(err);
@@ -172,6 +174,7 @@ export const useGlobalStore = defineStore('global', () => {
     password,
     token,
     posts,
+    post,
     currentUserId,
 
     signIn,

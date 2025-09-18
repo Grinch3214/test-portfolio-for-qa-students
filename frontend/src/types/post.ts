@@ -8,7 +8,7 @@ export interface Post {
   title: string;
   body: string;
   user_id: number;
-  tags: string[];
+  tags: Tags[];
   views: number;
   reactions: Reactions;
   created_at: string;
