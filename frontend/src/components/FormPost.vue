@@ -36,14 +36,14 @@
 
     <div class="form-actions">
       <button class="form-action btn" @click="save">Save</button>
-      <button class="form-cancel btn" @click="">Cancel</button>
+      <button class="form-cancel btn" @click="cancel">Cancel</button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { Post, Tags, PostForm } from '@/types/post';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps<{
   post?: Post;
@@ -67,12 +67,10 @@ const tags = ref([
   { name: 'Games', value: Tags.GAMES, active: false },
 ]);
 
-const oldValues = ref<PostForm | null>(null);
-
 const formData = ref<PostForm>({
-  title: '',
-  body: '',
-  tags: [],
+  title: props.post?.title || '',
+  body: props.post?.body || '',
+  tags: props.post?.tags || [],
 });
 
 function toggleTag(tag) {
@@ -83,6 +81,37 @@ function toggleTag(tag) {
 function save() {
   emit('save', formData.value);
 }
+
+function cancel() {
+  formData.value = props.post
+    ? { title: props.post.title, body: props.post.body, tags: props.post.tags }
+    : { title: '', body: '', tags: [] };
+  tags.value.forEach(
+    (tag) => (tag.active = props.post?.tags.includes(tag.value) || false)
+  );
+}
+
+watch(
+  () => props.post,
+  (newPost) => {
+    if (newPost) {
+      formData.value.title = newPost.title || '';
+      formData.value.body = newPost.body || '';
+      formData.value.tags = newPost.tags || [];
+
+      tags.value = tags.value.map((tag) => ({
+        ...tag,
+        active: newPost.tags.includes(tag.value),
+      }));
+    } else {
+      formData.value = { title: '', body: '', tags: [] };
+      tags.value.forEach((tag) => (tag.active = false));
+    }
+  },
+  { immediate: true }
+);
+
+defineExpose({ cancel });
 </script>
 
 <style scoped>

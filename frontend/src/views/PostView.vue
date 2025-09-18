@@ -1,27 +1,40 @@
 <template>
   <div class="post-view">
-    <article v-if="post" class="post">
+    <article v-if="globalStore.post" class="post">
       <header class="post-header">
-        <h1 class="post-title">{{ post.title }}</h1>
+        <h1 class="post-title">{{ globalStore.post.title }}</h1>
 
         <div class="post-meta">
-          <p class="post-author"><span>Author:</span> {{ post.author_name }}</p>
-          <p class="post-date">{{ formatDate(post.updated_at) }}</p>
+          <p class="post-author">
+            <span>Author:</span> {{ globalStore.post.author_name }}
+          </p>
+          <p class="post-date">{{ formatDate(globalStore.post.updated_at) }}</p>
         </div>
 
         <div class="post-badges">
-          <span v-for="tag in post.tags" class="badge active">{{ tag }}</span>
+          <span v-for="tag in globalStore.post.tags" class="badge active">{{
+            tag
+          }}</span>
         </div>
       </header>
 
       <div class="post-content">
-        <p>{{ post.body }}</p>
+        <p>{{ globalStore.post.body }}</p>
       </div>
 
       <footer class="post-footer">
         <router-link to="/blog" class="btn btn-gray">Back</router-link>
-        <button class="btn">Edit</button>
-        <button class="btn btn-error" @click="isModalShow = true">
+        <router-link
+          v-if="globalStore.isAuthenticated"
+          :to="`/blog/${route.params.id}/edit-post`"
+          class="btn"
+          >Edit</router-link
+        >
+        <button
+          v-if="globalStore.isAuthenticated"
+          class="btn btn-error"
+          @click="isModalShow = true"
+        >
           Delete
         </button>
       </footer>
@@ -35,8 +48,10 @@
   >
     <template #body>
       <div class="modal-body">
-        <button class="btn" @click="deletePost(post.id)">Yes</button>
-        <button class="btn btn-error" @click="isModalShow = false">
+        <button class="btn btn-error" @click="deletePost(globalStore.post.id)">
+          Yes
+        </button>
+        <button class="btn btn-gray" @click="isModalShow = false">
           Cancel
         </button>
       </div>
@@ -45,10 +60,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useGlobalStore } from '@/stores/global';
-import { Post } from '@/types/post';
 import Modal from '@/components/Modal.vue';
 
 const route = useRoute();
@@ -56,7 +70,6 @@ const router = useRouter();
 
 const globalStore = useGlobalStore();
 
-const post = ref<Post | null>(null);
 const isModalShow = ref<boolean>(false);
 
 function formatDate(isoDateString) {
@@ -84,9 +97,7 @@ async function deletePost(id) {
 }
 
 onMounted(async () => {
-  const res = await globalStore.getSinglePost(route.params.id);
-  post.value = res.data;
-
+  await globalStore.getSinglePost(route.params.id);
   await globalStore.incrementPostView(route.params.id);
 });
 </script>

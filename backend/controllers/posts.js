@@ -136,45 +136,103 @@ async function deletePost(req, res) {
   }
 }
 
-// function updateWorkout(req, res) {
-//   const id = Number(req.params.id);
-//   const { title, sets } = req.body;
+async function updatePost(req, res) {
+  try {
+    const { id } = req.params;
+    const { title, body, tags, reactions, views, user_id } = req.body;
 
-//   for (const day of mockData) {
-//     const workout = day.workouts.find((w) => w.id === id);
-//     if (workout) {
-//       if (title !== undefined) workout.title = title;
-//       if (Array.isArray(sets))
-//         workout.sets = sets.map((s) => ({
-//           weight: Number(s.weight),
-//           reps: Number(s.reps),
-//         }));
+    if (
+      !title &&
+      !body &&
+      tags === undefined &&
+      reactions === undefined &&
+      views === undefined &&
+      user_id === undefined
+    ) {
+      return res.status(400).json({
+        message: 'No fields to update provided',
+      });
+    }
 
-//       return res.json(workout);
-//     }
-//   }
+    if (title !== undefined && !title) {
+      return res.status(400).json({ message: 'Title cannot be empty' });
+    }
+    if (body !== undefined && !body) {
+      return res.status(400).json({ message: 'Body cannot be empty' });
+    }
+    if (user_id !== undefined && user_id === null) {
+      return res.status(400).json({ message: 'user_id cannot be null' });
+    }
 
-//   res.status(404).json({ message: 'Workout not found' });
-// }
+    const fields = [];
+    const values = [];
+    let paramIndex = 1;
 
-// function deleteWorkouts(req, res) {
-//   const id = Number(req.params.id);
+    if (title !== undefined) {
+      fields.push(`title = $${paramIndex}`);
+      values.push(title);
+      paramIndex++;
+    }
+    if (body !== undefined) {
+      fields.push(`body = $${paramIndex}`);
+      values.push(body);
+      paramIndex++;
+    }
+    if (tags !== undefined) {
+      fields.push(`tags = $${paramIndex}`);
+      values.push(tags);
+      paramIndex++;
+    }
+    if (reactions !== undefined) {
+      fields.push(`reactions = $${paramIndex}`);
+      values.push(JSON.stringify(reactions));
+      paramIndex++;
+    }
+    if (views !== undefined) {
+      fields.push(`views = $${paramIndex}`);
+      values.push(views);
+      paramIndex++;
+    }
+    if (user_id !== undefined) {
+      fields.push(`user_id = $${paramIndex}`);
+      values.push(user_id);
+      paramIndex++;
+    }
 
-//   for (const day of mockData) {
-//     const index = day.workouts.findIndex((w) => w.id === id);
-//     if (index !== -1) {
-//       day.workouts.splice(index, 1);
-//       return res.status(200).json({ message: 'Workout deleted', id });
-//     }
-//   }
+    fields.push(`updated_at = NOW()`);
 
-//   res.status(404).json({ message: 'Workout not found' });
-// }
+    const query = `
+      UPDATE posts
+      SET ${fields.join(', ')}
+      WHERE id = $${paramIndex}
+      RETURNING *
+    `;
+    values.push(id);
+
+    const result = await pool.query(query, values);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    res.json({
+      message: 'Post updated successfully',
+      post: result.rows[0],
+    });
+  } catch (err) {
+    console.error('Error updating post:', err);
+    res.status(500).json({
+      message: 'Error updating post',
+      error: err.message,
+    });
+  }
+}
 
 export {
   getAllPosts,
   getSinglePost,
   createPost,
   incrementPostViews,
+  updatePost,
   deletePost,
 };
