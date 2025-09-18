@@ -36,7 +36,7 @@
 
     <div class="form-actions">
       <button class="form-action btn" @click="save">Save</button>
-      <button class="form-cancel btn" @click="">Cancel</button>
+      <button class="form-cancel btn" @click="cancel">Cancel</button>
     </div>
   </div>
 </template>
@@ -82,6 +82,15 @@ function save() {
   emit('save', formData.value);
 }
 
+function cancel() {
+  formData.value = props.post
+    ? { title: props.post.title, body: props.post.body, tags: props.post.tags }
+    : { title: '', body: '', tags: [] };
+  tags.value.forEach(
+    (tag) => (tag.active = props.post?.tags.includes(tag.value) || false)
+  );
+}
+
 watch(
   () => props.post,
   (newPost) => {
@@ -101,6 +110,8 @@ watch(
   },
   { immediate: true }
 );
+
+defineExpose({ cancel });
 </script>
 
 <style scoped>

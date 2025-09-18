@@ -31,7 +31,7 @@
 			fill="currentColor" />
 	</symbol>
 	<!-- close -->
-	<symbol width="20" height="22" viewBox="0 0 20 22" id="close">
+	<symbol  viewBox="0 0 20 22" id="close">
 		<line x1="1" y1="-1" x2="25.9102" y2="-1" transform="matrix(0.704307 0.709896 -0.621947 0.78306 0 2)" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
 		<line x1="1" y1="-1" x2="25.9102" y2="-1" transform="matrix(0.704307 -0.709896 0.621947 0.78306 1 21.1035)" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
 	</symbol>
