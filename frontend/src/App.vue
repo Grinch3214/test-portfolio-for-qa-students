@@ -53,7 +53,4 @@ watch(
   padding: 50px 0;
   text-align: center;
 }
-
-.footer-desc {
-}
 </style>
