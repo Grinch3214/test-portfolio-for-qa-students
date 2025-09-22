@@ -59,11 +59,8 @@ onUnmounted(() => {
   justify-content: center;
   align-items: center;
   position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
   transition: opacity 0.2s ease;
-  right: 0;
   z-index: 998;
   background-color: var(--overlay-color);
 }
