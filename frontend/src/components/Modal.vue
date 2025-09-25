@@ -42,17 +42,6 @@ onUnmounted(() => {
 });
 </script>
 
-<style>
-.modal-animation-enter-active,
-.modal-animation-leave-active {
-  opacity: 0;
-}
-.modal-animation-enter-active .modal__content,
-.modal-animation-leave-active .modal__content {
-  transform: scale(0.5);
-}
-</style>
-
 <style scoped>
 .modal {
   display: flex;
