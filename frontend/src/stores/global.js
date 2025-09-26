@@ -43,7 +43,6 @@ export const useGlobalStore = defineStore('global', () => {
 
       const data = response.data;
       document.cookie = `auth_token=${data.token}; max-age=3600; path=/; Secure; SameSite=Strict`;
-      // document.cookie = `auth_token=${data.token}; max-age=3600; Secure; SameSite=Strict`;
       isAuthenticated.value = true;
       currentUserId.value = data.id;
       return data;
