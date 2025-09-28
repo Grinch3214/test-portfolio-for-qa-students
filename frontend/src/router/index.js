@@ -48,7 +48,7 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const globalStore = useGlobalStore();
 
-  await globalStore.checkAuth();
+  // await globalStore.checkAuth();
 
   if (to.meta.requiresAuth && !globalStore.isAuthenticated) {
     return next({ name: 'home' });
