@@ -46,6 +46,10 @@ watch(
     }
   }
 );
+
+onMounted(async () => {
+  await globalStore.checkAuth();
+});
 </script>
 
 <style scoped>
