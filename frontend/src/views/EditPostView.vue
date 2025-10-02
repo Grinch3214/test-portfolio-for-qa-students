@@ -51,7 +51,6 @@ async function save(data) {
 }
 
 function cancel() {
-  console.log('cancel');
   if (formPostRef.value) {
     formPostRef.value.reset();
   }
