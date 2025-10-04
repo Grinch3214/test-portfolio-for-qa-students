@@ -142,6 +142,17 @@ export const useGlobalStore = defineStore('global', () => {
     }
   }
 
+  async function updatePost({ id, title, body, tags }) {
+    const url = `${apiUrl}/posts/${id}`;
+
+    try {
+      const response = await axios.patch(url, { title, body, tags });
+      return response;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   async function deletePost(id) {
     const url = `${apiUrl}/posts/${id}`;
     const cookieToken = getTokenFromCookie();
@@ -183,6 +194,7 @@ export const useGlobalStore = defineStore('global', () => {
     getSinglePost,
     createNewPost,
     incrementPostView,
+    updatePost,
     deletePost,
   };
 });
