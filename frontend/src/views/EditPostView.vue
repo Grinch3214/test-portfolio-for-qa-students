@@ -47,7 +47,9 @@ async function save(data) {
     return;
   }
 
-  console.log(data);
+  const id = +route.params?.id;
+  const req = { ...data, id };
+  await globalStore.updatePost(req);
 }
 
 function cancel() {
