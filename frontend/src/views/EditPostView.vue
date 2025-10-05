@@ -49,7 +49,11 @@ async function save(data) {
 
   const id = +route.params?.id;
   const req = { ...data, id };
-  await globalStore.updatePost(req);
+  const response = await globalStore.updatePost(req);
+
+  if (response.data) {
+    router.push(`/blog/${id}`);
+  }
 }
 
 function cancel() {
