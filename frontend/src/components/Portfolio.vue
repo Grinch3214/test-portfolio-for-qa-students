@@ -57,15 +57,14 @@ const portfolio = [
 }
 
 .portfolio-cards {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 30px;
   margin-top: 40px;
 }
 
 .portfolio-card {
   height: 226px;
-  flex: 1 1 30%;
   overflow: hidden;
   border-radius: 15px;
 }
@@ -77,8 +76,8 @@ const portfolio = [
 }
 
 @media (max-width: 1100px) {
-  .portfolio-card {
-    flex: 1 1 46%;
+  .portfolio-cards {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -89,8 +88,8 @@ const portfolio = [
 }
 
 @media (max-width: 500px) {
-  .portfolio-card {
-    flex: 1 1 100%;
+  .portfolio-cards {
+    grid-template-columns: 1fr;
   }
 }
 </style>
